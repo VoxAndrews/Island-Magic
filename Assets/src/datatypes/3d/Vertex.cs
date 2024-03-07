@@ -13,14 +13,14 @@ namespace DataType3D                                                            
         public float3 position;
 
         /// <summary>
-        /// The tangent of the vertex
-        /// </summary>
-        public float4 tangent;
-
-        /// <summary>
         /// The normal of the vertex
         /// </summary>
         public float3 normal;
+
+        /// <summary>
+        /// The tangent of the vertex
+        /// </summary>
+        public float4 tangent;
 
         /// <summary>
         /// The texture coordinate of the vertex

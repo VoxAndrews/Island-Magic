@@ -12,9 +12,9 @@ namespace DataType3D.Streams                                                    
     {
         public float3 position;
 
-        public float4 tangent;
-
         public float3 normal;
+
+        public float4 tangent;
 
         public float2 texCoord0;
     }
@@ -33,14 +33,17 @@ namespace DataType3D.Streams                                                    
 
             if (type == StreamType.Single)
             {
-                descriptor[0] = new VertexAttributeDescriptor(dimension: 3);
+                descriptor[0] = new VertexAttributeDescriptor
+                (
+                    VertexAttribute.Position, dimension: 3
+                );
                 descriptor[1] = new VertexAttributeDescriptor
                 (
-                    VertexAttribute.Tangent, dimension: 4
+                    VertexAttribute.Normal, dimension: 3
                 );
                 descriptor[2] = new VertexAttributeDescriptor
                 (
-                    VertexAttribute.Normal, dimension: 3
+                    VertexAttribute.Tangent, dimension: 4
                 );
                 descriptor[3] = new VertexAttributeDescriptor
                 (
@@ -49,15 +52,17 @@ namespace DataType3D.Streams                                                    
             }
             else if (type == StreamType.Multi)
             {
-
-                descriptor[0] = new VertexAttributeDescriptor(dimension: 3);
+                descriptor[0] = new VertexAttributeDescriptor
+                (
+                    VertexAttribute.Position, dimension: 3, stream: 0
+                );
                 descriptor[1] = new VertexAttributeDescriptor
                 (
-                    VertexAttribute.Tangent, dimension: 4, stream: 1
+                    VertexAttribute.Normal, dimension: 3, stream: 1
                 );
                 descriptor[2] = new VertexAttributeDescriptor
                 (
-                    VertexAttribute.Normal, dimension: 3, stream: 2
+                    VertexAttribute.Tangent, dimension: 4, stream: 2
                 );
                 descriptor[3] = new VertexAttributeDescriptor
                 (
@@ -85,8 +90,8 @@ namespace DataType3D.Streams                                                    
         public void SetVertex(int index, Vertex vertex) => stream[index] = new Stream               // Set the vertexes for the multistream buffer
         {
             position = vertex.position,
-            tangent = vertex.tangent,
             normal = vertex.normal,
+            tangent = vertex.tangent,
             texCoord0 = vertex.texCoord0
         };
 
