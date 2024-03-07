@@ -16,7 +16,16 @@ public class ProceduralMesh : MonoBehaviour
     /// </summary>
     Mesh mesh;
 
+    /// <summary>
+    /// The type of stream to be used for the mesh
+    /// </summary>
     [SerializeField] StreamType streamType;
+
+    /// <summary>
+    /// The resolution of the mesh
+    /// </summary>
+    [SerializeField, Range(1, 100)]
+    int resolution = 1;
 
     void Awake()
     {
@@ -25,9 +34,16 @@ public class ProceduralMesh : MonoBehaviour
             name = "Procedural Mesh"
         };
 
-        GenerateMesh();
-
         GetComponent<MeshFilter>().mesh = mesh;
+    }
+
+    void OnValidate() => enabled = true;                                        // Enable the script on load or when the resolution changes in the inspector
+
+    void Update()
+    {
+        GenerateMesh();                                                         // Generate the mesh (In update to allow changing the resolution during runtime)
+
+        enabled = false;                                                        // Disable the script so it isn't called constantly
     }
 
     /// <summary>
@@ -40,7 +56,7 @@ public class ProceduralMesh : MonoBehaviour
 
         MeshJob<SquareGrid, DataStream>.ScheduleParallel                        // Schedule the job to be executed
         (
-            mesh, meshData, default, streamType
+            mesh, meshData, resolution, default, streamType
         ).Complete();
 
         Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh);              // Apply and dispose mesh data

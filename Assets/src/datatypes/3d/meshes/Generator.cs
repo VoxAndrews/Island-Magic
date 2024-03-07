@@ -38,5 +38,10 @@ namespace DataType3D
         /// The bounds of the mesh
         /// </summary>
         Bounds Bounds { get; }
+
+        /// <summary>
+        /// The resolution of the mesh
+        /// </summary>
+        int Resolution { get; set; }
     }
 }

@@ -1,3 +1,4 @@
+using System.Drawing;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -11,51 +12,65 @@ namespace DataType3D.Generators                                                 
     public struct SquareGrid : IMeshGenerator
     {
         /// <summary>
+        /// The resolution of the square grid
+        /// </summary>
+        public int Resolution { get; set; }
+
+        /// <summary>
         /// The number of vertices in the grid mesh
         /// </summary>
-        public int VertexCount => 4;
+        public int VertexCount => 4 * (Resolution * Resolution);
 
         /// <summary>
         /// The number of indices in the grid mesh
         /// </summary>
-        public int IndexCount => 6;
+        public int IndexCount => 6 * (Resolution * Resolution);
 
         /// <summary>
         /// The length of the job needed to generate the grid
         /// </summary>
-        public int JobLength => 1;
+        public int JobLength => Resolution;
 
         /// <summary>
         /// Executes the job for the grid
         /// </summary>
-        /// <param name="i">The index of the job</param>
+        /// <param name="z">The z-offset of the quad row</param>
         /// <param name="streams">The streams needed for the job</param>
-        public void Execute<S>(int i, S streams) where S : struct, IMeshStreams 
+        public void Execute<S>(int z, S streams) where S : struct, IMeshStreams 
         {
-            // Setting test vertices
-            var vertex = new Vertex();
+            int vi = 4 * Resolution * z, ti = 2 * Resolution * z;                                   // Determines the correct vertices and indices
 
-            // Setting vertices and adding them to the stream
-            vertex.normal.z = -1.0f;
-            vertex.tangent.xw = float2(1.0f, -1.0f);
-            streams.SetVertex(0, vertex);
+            for (int x = 0; x < Resolution; x++, vi += 4, ti += 2)                                  // Loops through the grid to generate rows of quads with an x-offset (Increment Vertex Index offset by 4 and Triangle Index offset by 2)
+            {
+                var xCoordinates = float2(x, x + 1f) / Resolution - 0.5f;                           // Calculating the coordinates of the quads
+                var zCoordinates = float2(z, z + 1f) / Resolution - 0.5f;
 
-            vertex.position = right();
-            vertex.texCoord0 = float2(1.0f, 0.0f);
-            streams.SetVertex(1, vertex);
+                var vertex = new Vertex();                                                          // Setting test vertices
 
-            vertex.position = up();
-            vertex.texCoord0 = float2(0.0f, 1.0f);
-            streams.SetVertex(2, vertex);
+                vertex.normal.y = 1.0f;                                                             // Setting vertices and adding them to the stream
+                vertex.tangent.xw = float2(1.0f, -1.0f);                                            // (Adjusting using the calculated indices & coordinates)
+                vertex.position.x = xCoordinates.x;
+                vertex.position.z = zCoordinates.x;
+                streams.SetVertex(vi + 0, vertex);
 
-            vertex.position = float3(1.0f, 1.0f, 0.0f);
-            vertex.texCoord0 = 1.0f;
-            streams.SetVertex(3, vertex);
+                vertex.position.x = xCoordinates.y;
+                vertex.texCoord0 = float2(1.0f, 0.0f);
+                streams.SetVertex(vi + 1, vertex);
 
-            streams.SetTriangle(0, int3(0, 2, 1));
-            streams.SetTriangle(1, int3(1, 2, 3));
+                vertex.position.x = xCoordinates.x;
+                vertex.position.z = zCoordinates.y;
+                vertex.texCoord0 = float2(0.0f, 1.0f);
+                streams.SetVertex(vi + 2, vertex);
+
+                vertex.position.x = xCoordinates.y;
+                vertex.texCoord0 = 1.0f;
+                streams.SetVertex(vi + 3, vertex);
+
+                streams.SetTriangle(ti + 0, vi + int3(0, 2, 1));
+                streams.SetTriangle(ti + 1, vi + int3(1, 2, 3));
+            }
         }
 
-        public Bounds Bounds => new Bounds(new Vector3(0.5f, 0.5f), new Vector3(1.0f, 1.0f));       // The implmentation of Bounds method
+        public Bounds Bounds => new Bounds(Vector3.zero, new Vector3(1f, 0f, 1f));                  // The implmentation of Bounds method
     }
 }

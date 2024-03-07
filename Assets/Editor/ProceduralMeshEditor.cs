@@ -6,16 +6,13 @@ public class ProceduralMeshEditor : Editor
 {
     #region SerializedProperties
     SerializedProperty streamType;                                                  // The streamType property used set the stream type when the mesh is generated
+    SerializedProperty resolution;                                                  // The resolution property used to set the resolution of the mesh
     #endregion
 
     private void OnEnable()
     {
         streamType = serializedObject.FindProperty("streamType");                   // Find the streamType property
-
-        if (streamType == null)
-        {
-            Debug.LogError("Failed to find the 'streamType' property. Make sure the property name is correct.");
-        }
+        resolution = serializedObject.FindProperty("resolution");                   // Find the resolution property
     }
 
     public override void OnInspectorGUI()
@@ -23,6 +20,7 @@ public class ProceduralMeshEditor : Editor
         serializedObject.Update();                                                  // Update the serializedObject
 
         EditorGUILayout.PropertyField(streamType);                                  // Draw the streamType property
+        EditorGUILayout.PropertyField(resolution);                                  // Draw the resolution property
 
         serializedObject.ApplyModifiedProperties();                                 // Apply the changes to the serializedObject
     }
