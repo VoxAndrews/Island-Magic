@@ -1,4 +1,5 @@
 using DataType3D;
+using DataType3D.Meshes;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using Unity.Collections;
@@ -6,10 +7,10 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace DataType3D.Streams
+namespace DataType3D.Streams                                                                        // Create a streams-specific namespace for DataType3D
 {
-    [StructLayout(LayoutKind.Sequential)]                                                   // Laid out sequentially so that it is placed into memory in the same order as the 'appdata_tan' struct
-    struct Stream                                                                           // Create a struct to store the data in a stream buffer
+    [StructLayout(LayoutKind.Sequential)]                                                           // Laid out sequentially so that it is placed into memory in the same order as the 'appdata_tan' struct
+    struct Stream                                                                                   // Create a struct to store the data in a stream buffer
     {
         public float3 position;
 
@@ -20,16 +21,16 @@ namespace DataType3D.Streams
         public float2 texCoord0;
     }
 
-    public struct DataStream : IMeshStreams 
+    public struct DataStream : Meshes.IMeshStreams
     {
         NativeArray<Stream> stream;
         NativeArray<int3> triangles;
 
         public void Setup(Mesh.MeshData meshData, int vertexCount, int indexCount, StreamType type)
         {
-            var descriptor = new NativeArray<VertexAttributeDescriptor>                         // Create an array of vertex attributes
+            var descriptor = new NativeArray<VertexAttributeDescriptor>                             // Create an array of vertex attributes
             (
-                4, Allocator.Temp                                                               // Can optionally choose to unitilize the array and allow garbage data with 'NativeArrayOptions.UninitializedMemory'
+                4, Allocator.Temp                                                                   // Can optionally choose to unitilize the array and allow garbage data with 'NativeArrayOptions.UninitializedMemory'
             );
 
             if (type == StreamType.Single)
@@ -70,20 +71,20 @@ namespace DataType3D.Streams
                 Debug.LogError("Invalid stream type. Please enter 'Single' or 'Multi'!");
             }
 
-            meshData.SetVertexBufferParams(vertexCount, descriptor);                            // Set the vertex buffer parameters (Reserves memory for the vertex attributes buffer)
-            descriptor.Dispose();                                                               // Dispose the vertex attributes
+            meshData.SetVertexBufferParams(vertexCount, descriptor);                                // Set the vertex buffer parameters (Reserves memory for the vertex attributes buffer)
+            descriptor.Dispose();                                                                   // Dispose the vertex attributes
 
-            meshData.SetIndexBufferParams(indexCount, IndexFormat.UInt32);                      // Set the index buffer parameters (Reserves memory for the vertex index buffer)
+            meshData.SetIndexBufferParams(indexCount, IndexFormat.UInt32);                          // Set the index buffer parameters (Reserves memory for the vertex index buffer)
 
-            meshData.subMeshCount = 1;                                                          // Set the number of sub meshes (The number of seperated meshes in a single larger mesh)
-            meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount));                       // Specifies what part of the index buffer to use for the sub mesh
+            meshData.subMeshCount = 1;                                                              // Set the number of sub meshes (The number of seperated meshes in a single larger mesh)
+            meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount));                           // Specifies what part of the index buffer to use for the sub mesh
 
-            stream = meshData.GetVertexData<Stream>();                                          // Get the vertex data for the multistream buffer
-            triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);                      // Get the indicies for a triangle and convert them to an int3
+            stream = meshData.GetVertexData<Stream>();                                              // Get the vertex data for the multistream buffer
+            triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);                          // Get the indicies for a triangle and convert them to an int3
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]                                      // Optimize the 'SetVertex' function by inlineing it and making sure it is included more than once
-        public void SetVertex(int index, Vertex vertex) => stream[index] = new Stream           // Set the vertexes for the multistream buffer
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]                                          // Optimize the 'SetVertex' function by inlineing it and making sure it is included more than once
+        public void SetVertex(int index, Vertex vertex) => stream[index] = new Stream               // Set the vertexes for the multistream buffer
         {
             position = vertex.position,
             tangent = vertex.tangent,
@@ -91,6 +92,6 @@ namespace DataType3D.Streams
             texCoord0 = vertex.texCoord0
         };
 
-        public void SetTriangle(int index, int3 triangle) => triangles[index] = triangle;       // Set the triangles for the multistream buffer
+        public void SetTriangle(int index, int3 triangle) => triangles[index] = triangle;           // Set the triangles for the multistream buffer
     }
 }
