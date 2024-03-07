@@ -55,5 +55,7 @@ namespace DataType3D.Generators                                                 
             streams.SetTriangle(0, int3(0, 2, 1));
             streams.SetTriangle(1, int3(1, 2, 3));
         }
+
+        public Bounds Bounds => new Bounds(new Vector3(0.5f, 0.5f), new Vector3(1.0f, 1.0f));       // The implmentation of Bounds method
     }
 }

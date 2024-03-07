@@ -16,6 +16,8 @@ public class ProceduralMesh : MonoBehaviour
     /// </summary>
     Mesh mesh;
 
+    [SerializeField] StreamType streamType;
+
     void Awake()
     {
         mesh = new Mesh
@@ -37,8 +39,8 @@ public class ProceduralMesh : MonoBehaviour
         Mesh.MeshData meshData = meshDataArray[0];                              // Get mesh data
 
         MeshJob<SquareGrid, DataStream>.ScheduleParallel                        // Schedule the job to be executed
-        ( 
-            meshData, default, StreamType.Multi
+        (
+            mesh, meshData, default, streamType
         ).Complete();
 
         Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh);              // Apply and dispose mesh data

@@ -32,10 +32,11 @@ namespace DataType3D                                                            
         /// A method to initilise the stream buffers
         /// </summary>
         /// <param name="data">The data of the mesh</param>
+        /// <param name="bounds">The bounds of the mesh</param>
         /// <param name="vertexCount">The amount of vertexes in the mesh</param>
         /// <param name="indexCount">The amount of indices in the mesh.</param>
         /// <param name="type">The format the data is stored in</param>
-        void Setup(Mesh.MeshData data, int vertexCount, int indexCount, StreamType type);
+        void Setup(Mesh.MeshData data, Bounds bounds, int vertexCount, int indexCount, StreamType type);
 
         /// <summary>
         /// A method to set the vertex data

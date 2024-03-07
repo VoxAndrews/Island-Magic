@@ -41,11 +41,20 @@ namespace DataType3D
         /// <param name="dependency">The dependency for the job</param>
         /// <param name="type">The type of the streams</param>
         /// <returns>The job handle (The unique identifier for the job)</returns>
-        public static JobHandle ScheduleParallel(Mesh.MeshData meshData, JobHandle dependency, StreamType type)
+        public static JobHandle ScheduleParallel(Mesh mesh, Mesh.MeshData meshData, JobHandle dependency, StreamType type)
         {
             var job = new MeshJob<G, S>();
 
-            job.streams.Setup(meshData, job.generator.VertexCount, job.generator.IndexCount, type);
+            mesh.bounds = job.generator.Bounds;
+
+            job.streams.Setup
+            (
+                meshData, 
+                mesh.bounds, 
+                job.generator.VertexCount, 
+                job.generator.IndexCount, 
+                type
+            );
 
             return job.ScheduleParallel(job.generator.JobLength, 1, dependency);
         }

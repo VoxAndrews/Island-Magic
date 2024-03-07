@@ -33,5 +33,10 @@ namespace DataType3D
         /// </summary>
         /// <returns>The length of the job</returns>
         int JobLength { get; }
+
+        /// <summary>
+        /// The bounds of the mesh
+        /// </summary>
+        Bounds Bounds { get; }
     }
 }
