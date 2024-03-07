@@ -1,4 +1,3 @@
-using DataType3D.Meshes;
 using System.Runtime.CompilerServices;                                                              // Used for [MethodImpl(MethodImplOptions.AggressiveInlining)]  
 using System.Runtime.InteropServices;                                                               // Used for [StructLayout(LayoutKind.Sequential)]
 using Unity.Collections;
@@ -6,7 +5,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace DataType3D.Streams                                                                        // Create a streams-specific namespace for DataType3D
+namespace DataType3D                                                                       // Create a streams-specific namespace for DataType3D
 {
     [StructLayout(LayoutKind.Sequential)]                                                           // Laid out sequentially so that it is placed into memory in the same order as the 'appdata_tan' struct
     struct Stream                                                                                   // Create a struct to store the data in a stream buffer
@@ -20,7 +19,7 @@ namespace DataType3D.Streams                                                    
         public float2 texCoord0;
     }
 
-    public struct DataStream : Meshes.IMeshStreams
+    public struct DataStream : IMeshStreams
     {
         NativeArray<Stream> stream;
         NativeArray<int3> triangles;

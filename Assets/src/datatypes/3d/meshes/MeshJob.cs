@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
 
-namespace DataType3D.Meshes.Jobs
+namespace DataType3D
 {
     /// <summary>
     /// Represents a job for mesh generation.
@@ -20,13 +20,13 @@ namespace DataType3D.Meshes.Jobs
         [WriteOnly]                                                                                 // Write only (Only writing at this point, don't need to read)
         S streams;
 
-        public void Execute(uint i) => generator.Execute(i, streams);
+        public void Execute(int i) => generator.Execute(i, streams);
 
-        public static JobHandle ScheduleParallel(Mesh.MeshData meshData, JobHandle dependency)
+        public static JobHandle ScheduleParallel(Mesh.MeshData meshData, JobHandle dependency, StreamType type)
         {
             var job = new MeshJob<G, S>();
 
-            job.streams.Setup(meshData, job.generator.VertexCount, job.generator.IndexCount);
+            job.streams.Setup(meshData, job.generator.VertexCount, job.generator.IndexCount, type);
 
             return job.ScheduleParallel(job.generator.JobLength, 1, dependency);
         }

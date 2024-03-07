@@ -1,7 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace DataType3D.Meshes                                                                         // A meshes-specific namespace for DataType3D
+namespace DataType3D                                                                       // A meshes-specific namespace for DataType3D
 {
     /// <summary>
     /// Represents the type of stream to be used for the mesh. Single-stream is 
@@ -62,24 +62,24 @@ namespace DataType3D.Meshes                                                     
         /// </summary>
         /// <param name="i">An index parameter (Implementation specific)</param>
         /// <param name="streams">The streams used for storage of the data</param>
-        void Execute<S>(uint i, S streams) where S : struct, IMeshStreams;
+        void Execute<S>(int i, S streams) where S : struct, IMeshStreams;
 
         /// <summary>
         /// The amount of vertexes in the generated mesh
         /// </summary>
         /// <returns>The amount of vertexes in the mesh</returns>
-        uint VertexCount { get; }
+        int VertexCount { get; }
 
         /// <summary>
         /// The amount of indices in the generated mesh
         /// </summary>
         /// <returns>The amount of indices in the mesh</returns>
-        uint IndexCount { get; }
+        int IndexCount { get; }
 
         /// <summary>
         /// The length of the mesh generation job
         /// </summary>
         /// <returns>The length of the job</returns>
-        uint JobLength { get; }
+        int JobLength { get; }
     }
 }
