@@ -1,7 +1,6 @@
-using DataType3D;
 using DataType3D.Meshes;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
+using System.Runtime.CompilerServices;                                                              // Used for [MethodImpl(MethodImplOptions.AggressiveInlining)]  
+using System.Runtime.InteropServices;                                                               // Used for [StructLayout(LayoutKind.Sequential)]
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;

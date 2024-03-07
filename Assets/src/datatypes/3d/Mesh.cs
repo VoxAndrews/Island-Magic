@@ -1,7 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace DataType3D.Meshes                                                                         // Create a meshes-specific namespace for DataType3D
+namespace DataType3D.Meshes                                                                         // A meshes-specific namespace for DataType3D
 {
     /// <summary>
     /// Represents the type of stream to be used for the mesh. Single-stream is 
@@ -62,7 +62,7 @@ namespace DataType3D.Meshes                                                     
         /// </summary>
         /// <param name="i">An index parameter (Implementation specific)</param>
         /// <param name="streams">The streams used for storage of the data</param>
-        void Execute<S>(int i, S streams) where S : struct, IMeshStreams;
+        void Execute<S>(uint i, S streams) where S : struct, IMeshStreams;
 
         /// <summary>
         /// The amount of vertexes in the generated mesh
