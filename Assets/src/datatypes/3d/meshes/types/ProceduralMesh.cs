@@ -38,7 +38,7 @@ public class ProceduralMesh : MonoBehaviour
 
         MeshJob<SquareGrid, DataStream>.ScheduleParallel                        // Schedule the job to be executed
         ( 
-            meshData, default, StreamType.Single
+            meshData, default, StreamType.Multi
         ).Complete();
 
         Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh);              // Apply and dispose mesh data

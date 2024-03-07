@@ -1,6 +1,7 @@
 using System.Runtime.CompilerServices;                                                              // Used for [MethodImpl(MethodImplOptions.AggressiveInlining)]  
 using System.Runtime.InteropServices;                                                               // Used for [StructLayout(LayoutKind.Sequential)]
 using Unity.Collections;
+using Unity.Collections.LowLevel.Unsafe;                                                            // Used for [NativeDisableContainerSafetyRestriction]
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -21,7 +22,9 @@ namespace DataType3D.Streams                                                    
 
     public struct DataStream : IMeshStreams
     {
+        [NativeDisableContainerSafetyRestriction]                                                   // Disable safety restrictions for the container to allow for compilation (Needed for Single-stream data)
         NativeArray<Stream> stream;
+        [NativeDisableContainerSafetyRestriction]                                                   // Disable safety restrictions for the container to allow for compilation (Needed for Single-stream data)
         NativeArray<int3> triangles;
 
         public void Setup(Mesh.MeshData meshData, int vertexCount, int indexCount, StreamType type)
@@ -80,7 +83,10 @@ namespace DataType3D.Streams                                                    
             meshData.SetIndexBufferParams(indexCount, IndexFormat.UInt32);                          // Set the index buffer parameters (Reserves memory for the vertex index buffer)
 
             meshData.subMeshCount = 1;                                                              // Set the number of sub meshes (The number of seperated meshes in a single larger mesh)
-            meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount));                           // Specifies what part of the index buffer to use for the sub mesh
+            meshData.SetSubMesh(0, new SubMeshDescriptor(0, indexCount),                            // Specifies what part of the index buffer to use for the sub mesh
+                MeshUpdateFlags.DontRecalculateBounds |                                             // Don't recalculate the bounds or validate the indices (Job not done yet)
+                MeshUpdateFlags.DontValidateIndices
+            );                           
 
             stream = meshData.GetVertexData<Stream>();                                              // Get the vertex data for the multistream buffer
             triangles = meshData.GetIndexData<int>().Reinterpret<int3>(4);                          // Get the indicies for a triangle and convert them to an int3
