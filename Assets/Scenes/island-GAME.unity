@@ -206,7 +206,7 @@ Transform:
   m_GameObject: {fileID: 430846276}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -2.35}
+  m_LocalPosition: {x: 0, y: 0.14, z: -0.723}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -284,10 +284,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 836181767}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f09b40550f43017218c6b9fe5446e651, type: 3}
+  m_Script: {fileID: 11500000, guid: a343d5759d1bc10448700a935411a12e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  streamType: 0
+  meshType: 1
+  streamType: 1
+  meshMat: {fileID: 2100000, guid: 141d9d6ca43b6c843965491604c6deff, type: 2}
   resolution: 100
 --- !u!23 &836181769
 MeshRenderer:
@@ -311,7 +313,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b36a750c44c8dac2d88cb97b7aca304f, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

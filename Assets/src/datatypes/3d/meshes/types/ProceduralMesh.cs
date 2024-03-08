@@ -12,20 +12,50 @@ using UnityEngine.Rendering;
 public class ProceduralMesh : MonoBehaviour 
 {
     /// <summary>
+    /// A set of enums to represent the types of mesh to be generated
+    /// </summary>
+    public enum MeshType
+    {
+        SquareGrid, SharedSquareGrid
+    };
+
+    /// <summary>
     /// The mesh object to be generated
     /// </summary>
     Mesh mesh;
 
     /// <summary>
+    /// The type of mesh to be generated (Shared verticies or not)
+    /// </summary>
+    [SerializeField]
+    MeshType meshType;
+
+    /// <summary>
     /// The type of stream to be used for the mesh
     /// </summary>
-    [SerializeField] StreamType streamType;
+    [SerializeField]
+    StreamType streamType;
+
+    /// <summary>
+    /// The material of the mesh
+    /// </summary>
+    [SerializeField]
+    Material meshMat;
 
     /// <summary>
     /// The resolution of the mesh
     /// </summary>
     [SerializeField, Range(1, 100)]
     int resolution = 1;
+
+    /// <summary>
+    /// The jobs to be executed
+    /// </summary>
+    static MeshJobScheduleDelegate[] jobs = 
+    {
+        MeshJob<SquareGrid, DataStream>.ScheduleParallel,
+        MeshJob<SharedSquareGrid, DataStream>.ScheduleParallel
+    };
 
     void Awake()
     {
@@ -54,11 +84,19 @@ public class ProceduralMesh : MonoBehaviour
         Mesh.MeshDataArray meshDataArray = Mesh.AllocateWritableMeshData(1);    // Allocate mesh data
         Mesh.MeshData meshData = meshDataArray[0];                              // Get mesh data
 
-        MeshJob<SquareGrid, DataStream>.ScheduleParallel                        // Schedule the job to be executed
-        (
-            mesh, meshData, resolution, default, streamType
-        ).Complete();
+        jobs[(int)meshType](mesh, meshData, resolution, default, streamType).Complete();
 
         Mesh.ApplyAndDisposeWritableMeshData(meshDataArray, mesh);              // Apply and dispose mesh data
+
+        if (meshMat != null)
+        {
+            GetComponent<Renderer>().material = meshMat;
+        }
+        else
+        {
+            meshMat = Resources.Load<Material>("Materials/Default");
+
+            GetComponent<Renderer>().material = meshMat;
+        }
     }
 }

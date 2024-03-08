@@ -35,8 +35,9 @@ namespace DataType3D
         public void Execute(int i) => generator.Execute(i, streams);
 
         /// <summary>
-        /// 
+        /// Schedules the job for parallel execution
         /// </summary>
+        /// <param name="mesh">The mesh object to generate</param>
         /// <param name="meshData">The data to generate the mesh</param>
         /// <param name="dependency">The dependency for the job</param>
         /// <param name="type">The type of the streams</param>
@@ -61,4 +62,17 @@ namespace DataType3D
             return job.ScheduleParallel(job.generator.JobLength, 1, dependency);
         }
     }
+
+    /// <summary>
+    /// The delegate for the mesh job (Works similar to a function pointer in C++)
+    /// </summary>
+    /// <param name="mesh">The mesh object to generate</param>
+    /// <param name="meshData">The data to generate the mesh</param>
+    /// <param name="dependency">The dependency for the job</param>
+    /// <param name="type">The type of the streams</param>
+    /// <returns>The job handle (The unique identifier for the job)</returns>
+    public delegate JobHandle MeshJobScheduleDelegate
+    (
+        Mesh mesh, Mesh.MeshData meshData, int resolution, JobHandle dependency, StreamType type
+    );
 }
